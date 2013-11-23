@@ -17,7 +17,7 @@ package lz.tools
 		{
 			new PushButton(this, 10, 10, "openswf", openswf);
 			addChild(swfTree);
-			swfTree.y = 100;
+			swfTree.y = 30;
 		}
 		
 		private function openswf(e:Event):void 

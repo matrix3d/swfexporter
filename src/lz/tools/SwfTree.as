@@ -29,7 +29,8 @@ package lz.tools
 			menu.setSize(200, 200);
 			menu.addEventListener(Event.SELECT, menu_select);
 			addChild(symbolView);
-			symbolView.x = 210;
+			symbolView.x = 410;
+			symbolView.y = 210;
 		}
 		
 		private function menu_select(e:Event):void 
@@ -60,6 +61,7 @@ package lz.tools
 					bits2.zlibBitmapData.uncompress();
 					image.setPixels(image.rect, bits2.zlibBitmapData);
 					tag2bitmap[tag] = image;
+					trace(bits2.characterId);
 				}else if (tag is TagDefineBits) {
 					var tagdb:TagDefineBits = tag as TagDefineBits;
 					var exp:ExportBitmapOver = new ExportBitmapOver;
@@ -72,13 +74,15 @@ package lz.tools
 	}
 }
 import com.codeazur.as3swf.tags.ITag;
+import com.codeazur.as3swf.tags.TagDefineBits;
 import flash.display.BitmapData;
 import flash.utils.Dictionary;
 
 class ExportBitmapOver {
 	public var tag2bitmap:Dictionary;
-	public var tag:ITag;
+	public var tag:TagDefineBits;
 	public function onover(bmd:BitmapData):void {
 		tag2bitmap[tag] = bmd;
+		trace(tag.characterId);
 	}
 }
