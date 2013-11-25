@@ -61,7 +61,7 @@ package lz.tools
 					bits2.zlibBitmapData.uncompress();
 					image.setPixels(image.rect, bits2.zlibBitmapData);
 					tag2bitmap[tag] = image;
-					trace(bits2.characterId);
+					//trace(bits2.characterId);
 				}else if (tag is TagDefineBits) {
 					var tagdb:TagDefineBits = tag as TagDefineBits;
 					var exp:ExportBitmapOver = new ExportBitmapOver;

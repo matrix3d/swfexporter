@@ -55,24 +55,36 @@ package lz.tools
 			removeEventListener(Event.ADDED_TO_STAGE, addedToStage);
 			stage.addEventListener(KeyboardEvent.KEY_DOWN, stage_keyDown);
 			stage.addEventListener(KeyboardEvent.KEY_UP, stage_keyUp);
+			stage.addEventListener(MouseEvent.MIDDLE_MOUSE_DOWN, stage_middleMouseDown);
+			stage.addEventListener(MouseEvent.MIDDLE_MOUSE_UP, stage_middleMouseUp);
+		}
+		
+		private function stage_middleMouseDown(e:MouseEvent):void 
+		{
+			stage.addEventListener(MouseEvent.MOUSE_MOVE, stage_mouseMove);
+			Mouse.cursor = MouseCursor.HAND;
+			startMouseX = mouseX;
+			startMouseY = mouseY;
+			startSymbolWrapperX = symbolWrapper.x;
+			startSymbolWrapperY = symbolWrapper.y;
+		}
+		
+		private function stage_middleMouseUp(e:MouseEvent):void 
+		{
+			stage.removeEventListener(MouseEvent.MOUSE_MOVE, stage_mouseMove);
+			Mouse.cursor = MouseCursor.ARROW;
 		}
 		
 		private function stage_keyDown(e:KeyboardEvent):void 
 		{
 			if (e.keyCode==Keyboard.SPACE&&stage) {
-				stage.addEventListener(MouseEvent.MOUSE_MOVE, stage_mouseMove);
-				Mouse.cursor = MouseCursor.HAND;
-				startMouseX = mouseX;
-				startMouseY = mouseY;
-				startSymbolWrapperX = symbolWrapper.x;
-				startSymbolWrapperY = symbolWrapper.y;
+				stage_middleMouseDown(null);
 			}
 		}
 		private function stage_keyUp(e:KeyboardEvent):void 
 		{
 			if (e.keyCode==Keyboard.SPACE&&stage) {
-				stage.removeEventListener(MouseEvent.MOUSE_MOVE, stage_mouseMove);
-				Mouse.cursor = MouseCursor.ARROW;
+				stage_middleMouseUp(null);
 			}
 		}
 		private function stage_mouseMove(e:MouseEvent):void 
