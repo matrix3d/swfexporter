@@ -23,9 +23,17 @@ package lz.tools
 				removeChildAt(0);
 			}
 			var cframe:int = frame % frames.length;
+			var objs:Array = [];
 			for each(var obj:FrameObject in frames[cframe].objects) {
+				objs.push(obj);
+			}
+			objs.sortOn("depth", Array.NUMERIC);
+			for each(obj in objs) {
 				var dis:DisplayObject = tags[obj.placedAtIndex];
+				var tdis:DisplayObject = tags[obj.lastModifiedAtIndex];
 				if (dis) {
+					if(obj.lastModifiedAtIndex)
+					dis.transform.matrix = tdis.transform.matrix;
 					addChild(dis);
 				}
 			}
