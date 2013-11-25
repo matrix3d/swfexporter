@@ -25,12 +25,12 @@ package lz.tools
 		private var tag2bitmap:Dictionary = new Dictionary;
 		public function SwfTree() 
 		{
-			menu = new List(this, 10, 10, ["1", "2"]);
-			menu.setSize(200, 200);
-			menu.addEventListener(Event.SELECT, menu_select);
 			addChild(symbolView);
 			symbolView.x = 410;
 			symbolView.y = 210;
+			menu = new List(this, 10, 10, ["1", "2"]);
+			menu.setSize(200, 200);
+			menu.addEventListener(Event.SELECT, menu_select);
 		}
 		
 		private function menu_select(e:Event):void 
@@ -75,7 +75,11 @@ package lz.tools
 }
 import com.codeazur.as3swf.tags.ITag;
 import com.codeazur.as3swf.tags.TagDefineBits;
+import com.codeazur.as3swf.tags.TagDefineBitsJPEG3;
+import flash.display.Bitmap;
 import flash.display.BitmapData;
+import flash.events.Event;
+import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 
 class ExportBitmapOver {
@@ -83,6 +87,19 @@ class ExportBitmapOver {
 	public var tag:TagDefineBits;
 	public function onover(bmd:BitmapData):void {
 		tag2bitmap[tag] = bmd;
-		trace(tag.characterId);
+		if (tag is TagDefineBitsJPEG3) {
+			var jpg3:TagDefineBitsJPEG3 = tag as TagDefineBitsJPEG3;
+			if (jpg3.bitmapAlphaData.bytesAvailable>0) {
+				jpg3.bitmapAlphaData.uncompress();
+				bmd.unlock();
+				var bd:ByteArray = bmd.getPixels(bmd.rect);
+				for (var i:int = 0, len:int = jpg3.bitmapAlphaData.length; i < len; i ++ ) {
+					bd[i * 4] = jpg3.bitmapAlphaData[i];
+				}
+				bd.position = 0;
+				bmd.setPixels(bmd.rect, bd);
+				bmd.unlock();
+			}
+		}
 	}
 }
