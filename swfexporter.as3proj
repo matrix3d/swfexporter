@@ -52,8 +52,8 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="lib\as3swf.swc" />
     <element path="lib\MinimalComps_0_9_10.swc" />
+    <element path="lib\as3swf.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

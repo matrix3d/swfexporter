@@ -27,8 +27,6 @@ package lz.tools
 				var dis:DisplayObject = tags[obj.placedAtIndex];
 				if (dis) {
 					addChild(dis);
-				}else {
-					trace("d");
 				}
 			}
 			frame++;

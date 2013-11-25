@@ -1,5 +1,6 @@
 package lz.tools 
 {
+	import com.codeazur.as3swf.data.SWFMatrix;
 	import com.codeazur.as3swf.data.SWFSymbol;
 	import com.codeazur.as3swf.exporters.core.IShapeExporter;
 	import com.codeazur.as3swf.SWF;
@@ -13,6 +14,7 @@ package lz.tools
 	import flash.display.BitmapData;
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Shape;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
@@ -150,6 +152,8 @@ package lz.tools
 				var tagShape:TagDefineShape = tag as TagDefineShape;
 				currentShapeWrapper = new Sprite;
 				tagShape.export(this);
+				
+				
 				return currentShapeWrapper;
 			}else {
 				//trace("error1",tag);
