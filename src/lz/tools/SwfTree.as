@@ -47,7 +47,7 @@ package lz.tools
 		
 		public function reset(swf:SWF):void {
 			this.swf = swf;
-		//	trace(swf);
+			//trace(swf);
 			menu.removeAll();
 			for each(var tag:ITag in swf.tags) {
 				if (tag is TagSymbolClass) {

@@ -48,6 +48,24 @@ package lz.tools
 			symbolWrapper.graphics.moveTo( 0, len);
 			symbolWrapper.graphics.lineTo( 1, -len);
 			addEventListener(Event.ADDED_TO_STAGE, addedToStage);
+			addEventListener(Event.ENTER_FRAME, enterFrame);
+		}
+		
+		private function enterFrame(e:Event):void 
+		{
+			doSprite(symbolWrapper);
+		}
+		
+		private function doSprite(s:DisplayObject):void {
+			if (s is TimelineSprite) {
+				(s as TimelineSprite).update();
+			}
+			if (s is DisplayObjectContainer) {
+				var c:DisplayObjectContainer = s as DisplayObjectContainer;
+				for (var i:int = 0; i < c.numChildren;i++ ) {
+					doSprite(c.getChildAt(i));
+				}
+			}
 		}
 		
 		private function addedToStage(e:Event):void 
@@ -108,13 +126,15 @@ package lz.tools
 			if (bmd) {
 				return new Bitmap(bmd);
 			}else if (tag is SWFTimelineContainer) {
-				var wrapper:Sprite = new Sprite;
+				var wrapper:TimelineSprite = new TimelineSprite;
 				var timeline:SWFTimelineContainer = tag as SWFTimelineContainer;
+				wrapper.frames = timeline.frames;
 				for each(var ctag:ITag in timeline.tags) {
 					if (ctag is TagPlaceObject) {
-						wrapper.addChild(getDisplay(ctag));
+						wrapper.tags.push(getDisplay(ctag));
 					}else {
 						//trace("error2",ctag);
+						wrapper.tags.push(null);
 					}
 				}
 				return wrapper;
