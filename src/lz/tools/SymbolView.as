@@ -121,7 +121,7 @@ package lz.tools
 			this.tagid2bitmap = tagid2bitmap;
 			this.swf = swf;
 			this.symbol = symbol;
-			deftag = SwfUtil.getTagById(swf, symbol.tagId);
+			deftag = Utils.getTagById(swf, symbol.tagId);
 			symbolWrapper.addChild(getDisplay(deftag));
 		}
 		
@@ -143,7 +143,7 @@ package lz.tools
 				return wrapper;
 			}else if (tag is TagPlaceObject) {
 				var tagPlace:TagPlaceObject = tag as TagPlaceObject;
-				ctag = SwfUtil.getTagById(swf, tagPlace.characterId);
+				ctag = Utils.getTagById(swf, tagPlace.characterId);
 				var child:DisplayObject = getDisplay(ctag);
 				if (tagPlace.hasMatrix) {
 					child.transform.matrix =new Matrix(tagPlace.matrix.scaleX,tagPlace.matrix.rotateSkew0,tagPlace.matrix.rotateSkew1, tagPlace.matrix.scaleY,tagPlace.matrix.translateX/20,tagPlace.matrix.translateY/20);

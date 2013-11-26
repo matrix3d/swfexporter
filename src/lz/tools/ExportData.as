@@ -16,6 +16,16 @@ package lz.tools
 			
 		}
 		
+		public function getBytes():ByteArray {
+			if (data is ByteArray) {
+				return data as ByteArray;
+			}
+			
+			var b:ByteArray = new ByteArray;
+			b.writeMultiByte(data+"", "utf-8");
+			return b;
+		}
+		
 	}
 
 }

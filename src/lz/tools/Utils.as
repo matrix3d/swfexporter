@@ -9,11 +9,14 @@ package lz.tools
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.utils.ByteArray;
+	import nochump.util.zip.ZipEntry;
+	import nochump.util.zip.ZipOutput;
 	/**
 	 * ...
 	 * @author lizhi
 	 */
-	public class SwfUtil 
+	public class Utils 
 	{
 		public static function getTagById(swf:SWF, id:int):IDefinitionTag {
 			for each(var tag:ITag in swf.tags) {
@@ -55,6 +58,18 @@ package lz.tools
 				return obj;
 			}
 			return null;
+		}
+		
+		public static function tozip(files:Vector.<ExportData>):ByteArray {
+			var out:ZipOutput = new ZipOutput;
+			for each(var file:ExportData in files) {
+				var entry:ZipEntry = new ZipEntry(file.name);
+				out.putNextEntry(entry);
+				out.write(file.getBytes());
+				out.closeEntry();
+			}
+			out.finish();
+			return out.byteArray;
 		}
 	}
 

@@ -55,6 +55,7 @@
     <element path="lib\MinimalComps_0_9_10.swc" />
     <element path="lib\as3swf.swc" />
     <element path="lib\RectanglePacker.swc" />
+    <element path="lib\zip.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

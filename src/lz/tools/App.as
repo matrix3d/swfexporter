@@ -6,6 +6,7 @@ package lz.tools
 	import flash.events.Event;
 	import flash.net.FileFilter;
 	import flash.net.FileReference;
+	import flash.net.FileReferenceList;
 	/**
 	 * ...
 	 * @author lizhi
@@ -15,7 +16,6 @@ package lz.tools
 		private var file:FileReference;
 		private var swfTree:SwfTree = new SwfTree;
 		
-		private var waitSaves:Vector.<ExportData>;
 		public function App() 
 		{
 			addChild(swfTree);
@@ -26,22 +26,8 @@ package lz.tools
 		
 		private function export(e:Event):void 
 		{
-			waitSaves = swfTree.export();
-			saveOne();
-		}
-		
-		private function saveOne():void {
-			if (waitSaves.length) {
-				var data:ExportData = waitSaves.pop();
-				var file:FileReference = new FileReference;
-				file.save(data.data, data.name);
-				file.addEventListener(Event.COMPLETE, save_file_complete);
-			}
-		}
-		
-		private function save_file_complete(e:Event):void 
-		{
-			saveOne();
+			var file:FileReference = new FileReference;
+			file.save(Utils.tozip(swfTree.export()), "swf.zip");
 		}
 		
 		private function openswf(e:Event):void 
