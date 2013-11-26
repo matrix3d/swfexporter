@@ -7,6 +7,8 @@ package lz.tools
 	import com.codeazur.as3swf.SWFTimelineContainer;
 	import com.codeazur.as3swf.tags.IDefinitionTag;
 	import com.codeazur.as3swf.tags.ITag;
+	import com.codeazur.as3swf.tags.TagDefineBits;
+	import com.codeazur.as3swf.tags.TagDefineBitsLossless;
 	import com.codeazur.as3swf.tags.TagDefineShape;
 	import com.codeazur.as3swf.tags.TagDefineSprite;
 	import com.codeazur.as3swf.tags.TagPlaceObject;
@@ -32,9 +34,9 @@ package lz.tools
 	{
 		private var symbol:SWFSymbol;
 		private var swf:SWF;
-		private var tag2bitmap:Dictionary;
+		private var tagid2bitmap:Object;
 		private var deftag:IDefinitionTag;
-		private var symbolWrapper:Sprite = new Sprite;
+		public var symbolWrapper:Sprite = new Sprite;
 		private var currentShapeWrapper:Sprite;
 		private var startMouseX:Number;
 		private var startMouseY:Number;
@@ -113,10 +115,10 @@ package lz.tools
 			symbolWrapper.y = startSymbolWrapperY + mouseY - startMouseY;
 		}
 		
-		public function reset(symbol:SWFSymbol, swf:SWF, tag2bitmap:Dictionary):void {
+		public function reset(symbol:SWFSymbol, swf:SWF, tagid2bitmap:Object):void {
 			symbolWrapper.x = symbolWrapper.y = 0;
 			while (symbolWrapper.numChildren > 0) symbolWrapper.removeChildAt(0);
-			this.tag2bitmap = tag2bitmap;
+			this.tagid2bitmap = tagid2bitmap;
 			this.swf = swf;
 			this.symbol = symbol;
 			deftag = SwfUtil.getTagById(swf, symbol.tagId);
@@ -124,9 +126,8 @@ package lz.tools
 		}
 		
 		private function getDisplay(tag:ITag):DisplayObject {
-			var bmd:BitmapData = tag2bitmap[tag];
-			if (bmd) {
-				return new Bitmap(bmd);
+			if (tag is TagDefineBitsLossless||tag is TagDefineBits) {
+				return new IDBitmap((tag as Object).characterId,tagid2bitmap[(tag as Object).characterId]);
 			}else if (tag is SWFTimelineContainer) {
 				var wrapper:TimelineSprite = new TimelineSprite;
 				var timeline:SWFTimelineContainer = tag as SWFTimelineContainer;
@@ -152,8 +153,6 @@ package lz.tools
 				var tagShape:TagDefineShape = tag as TagDefineShape;
 				currentShapeWrapper = new Sprite;
 				tagShape.export(this);
-				
-				
 				return currentShapeWrapper;
 			}else {
 				//trace("error1",tag);
@@ -205,9 +204,9 @@ package lz.tools
 		
 		public function beginBitmapFill(bitmapId:uint, matrix:Matrix = null, repeat:Boolean = true, smooth:Boolean = false):void 
 		{
-			var bmd:BitmapData = tag2bitmap[SwfUtil.getTagById(swf,bitmapId)];
+			var bmd:BitmapData = tagid2bitmap[bitmapId];
 			if (bmd) {
-				var image:Bitmap = new Bitmap(bmd,"auto",smooth);
+				var image:IDBitmap = new IDBitmap(bitmapId,bmd,"auto",smooth);
 				if (matrix) {
 					image.transform.matrix = matrix;
 				}

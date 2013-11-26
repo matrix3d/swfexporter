@@ -9,8 +9,10 @@ package lz.tools
 	import com.codeazur.as3swf.tags.TagDefineBitsLossless2;
 	import com.codeazur.as3swf.tags.TagSymbolClass;
 	import flash.display.BitmapData;
+	import flash.display.PNGEncoderOptions;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	/**
 	 * ...
@@ -22,7 +24,7 @@ package lz.tools
 		private var menu:List;
 		private var symbolTag:TagSymbolClass;
 		private var symbolView:SymbolView = new SymbolView;
-		private var tag2bitmap:Dictionary = new Dictionary;
+		private var tagid2bitmap:Object;
 		public function SwfTree() 
 		{
 			addChild(symbolView);
@@ -38,7 +40,7 @@ package lz.tools
 			if (swf&&symbolTag) {
 				for each(var symbol:SWFSymbol in symbolTag.symbols) {
 					if (menu.selectedItem == symbol.name) {
-						symbolView.reset(symbol, swf,tag2bitmap);
+						symbolView.reset(symbol, swf,tagid2bitmap);
 						break;
 					}
 				}
@@ -48,6 +50,7 @@ package lz.tools
 		public function reset(swf:SWF):void {
 			this.swf = swf;
 			//trace(swf);
+			tagid2bitmap = { };
 			menu.removeAll();
 			for each(var tag:ITag in swf.tags) {
 				if (tag is TagSymbolClass) {
@@ -60,16 +63,33 @@ package lz.tools
 					var image:BitmapData = new BitmapData(bits2.bitmapWidth, bits2.bitmapHeight, true, 0);
 					bits2.zlibBitmapData.uncompress();
 					image.setPixels(image.rect, bits2.zlibBitmapData);
-					tag2bitmap[tag] = image;
+					tagid2bitmap[bits2.characterId] = image;
 					//trace(bits2.characterId);
 				}else if (tag is TagDefineBits) {
 					var tagdb:TagDefineBits = tag as TagDefineBits;
 					var exp:ExportBitmapOver = new ExportBitmapOver;
 					exp.tag = tagdb;
-					exp.tag2bitmap = tag2bitmap;
+					exp.tagid2bitmap = tagid2bitmap;
 					tagdb.exportBitmapData(exp.onover);
 				}
 			}
+		}
+		
+		public function export():Vector.<ExportData> {
+			var pack:PackUtils = new PackUtils;
+			pack.pack(tagid2bitmap);
+			
+			var obj:Object = { };
+			if(symbolTag)
+			for each(var symbol:SWFSymbol in symbolTag.symbols) {
+				symbolView.reset(symbol, swf, tagid2bitmap);
+				obj[symbol.name] = SwfUtil.export(symbolView.symbolWrapper);
+			}
+			return Vector.<ExportData>([
+				new ExportData("sheet.png", pack.packbmd.encode(pack.packbmd.rect, new PNGEncoderOptions())),
+				new ExportData("objs.json", JSON.stringify(obj)),
+				new ExportData("sheet.json", JSON.stringify(pack.config))
+			]);
 		}
 	}
 }
@@ -83,10 +103,10 @@ import flash.utils.ByteArray;
 import flash.utils.Dictionary;
 
 class ExportBitmapOver {
-	public var tag2bitmap:Dictionary;
+	public var tagid2bitmap:Object;
 	public var tag:TagDefineBits;
 	public function onover(bmd:BitmapData):void {
-		tag2bitmap[tag] = bmd;
+		tagid2bitmap[tag.characterId] = bmd;
 		if (tag is TagDefineBitsJPEG3) {
 			var jpg3:TagDefineBitsJPEG3 = tag as TagDefineBitsJPEG3;
 			if (jpg3.bitmapAlphaData.bytesAvailable>0) {

@@ -16,7 +16,7 @@
     </define>
     <define append="true">
       <name>CONFIG::timeStamp</name>
-      <value>'2013/11/25'</value>
+      <value>'2013/11/26'</value>
     </define>
     <define append="true">
       <name>CONFIG::air</name>
@@ -39,6 +39,7 @@
     <library-path append="true">
       <path-element>D:\project\swfexporter\lib\MinimalComps_0_9_10.swc</path-element>
       <path-element>D:\project\swfexporter\lib\as3swf.swc</path-element>
+      <path-element>D:\project\swfexporter\lib\RectanglePacker.swc</path-element>
     </library-path>
   </compiler>
   <file-specs>
