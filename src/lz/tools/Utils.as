@@ -31,11 +31,13 @@ package lz.tools
 		}
 		
 		public static function export(disobj:DisplayObject):Object {
+			if(disobj)
+			var m:Array = [disobj.transform.matrix.a, disobj.transform.matrix.b, disobj.transform.matrix.c, disobj.transform.matrix.d, disobj.transform.matrix.tx, disobj.transform.matrix.ty];
 			if (disobj is IDBitmap) {
-				return {id:(disobj as IDBitmap).id,t:Type.BITMAP};
+				return {id:(disobj as IDBitmap).id,t:Type.BITMAP,m:m};
 			}else if (disobj is TimelineSprite) {
 				var timeline:TimelineSprite = disobj as TimelineSprite;
-				var obj:Object = { t:Type.TIMELINE, c:[], f:[] };
+				var obj:Object = { t:Type.TIMELINE, c:[], f:[],m:m };
 				for (var i:int = 0; i < timeline.tags.length;i++ ) {
 					obj.c[i] = export(timeline.tags[i]);
 				}
@@ -50,7 +52,7 @@ package lz.tools
 				return obj;
 			}else if (disobj is Sprite) {
 				var wrapper:Sprite = disobj as Sprite;
-				obj = {t:Type.SPRITE,c:[]};
+				obj = {t:Type.SPRITE,c:[],m:m};
 				for (i = 0; i < wrapper.numChildren;i++ ) {
 					var child:DisplayObject = wrapper.getChildAt(i);
 					obj.c.push(export(child));
