@@ -42,7 +42,7 @@ package lz.tools
 		private var startMouseY:Number;
 		private var startSymbolWrapperX:Number;
 		private var startSymbolWrapperY:Number;
-		
+		private var depth2lastObj:Object;
 		public var dis2name:Dictionary;
 		public function SymbolView() 
 		{
@@ -118,6 +118,7 @@ package lz.tools
 		}
 		
 		public function reset(symbol:SWFSymbol, swf:SWF, tagid2bitmap:Object):void {
+			depth2lastObj = { };
 			symbolWrapper.x = symbolWrapper.y = 0;
 			dis2name = new Dictionary;
 			while (symbolWrapper.numChildren > 0) symbolWrapper.removeChildAt(0);
@@ -150,7 +151,10 @@ package lz.tools
 				var child:DisplayObject = getDisplay(ctag);
 				dis2name[child] = tagPlace.instanceName;
 				if (tagPlace.hasMatrix) {
+					depth2lastObj[tagPlace.depth] = child;
 					child.transform.matrix =new Matrix(tagPlace.matrix.scaleX,tagPlace.matrix.rotateSkew0,tagPlace.matrix.rotateSkew1, tagPlace.matrix.scaleY,tagPlace.matrix.translateX/20,tagPlace.matrix.translateY/20);
+				}else if(depth2lastObj[tagPlace.depth]){
+					child.transform.matrix = depth2lastObj[tagPlace.depth].transform.matrix;
 				}
 				return child;
 			}else if (tag is TagDefineShape) {
