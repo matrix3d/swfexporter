@@ -42,6 +42,8 @@ package lz.tools
 		private var startMouseY:Number;
 		private var startSymbolWrapperX:Number;
 		private var startSymbolWrapperY:Number;
+		
+		public var dis2name:Dictionary;
 		public function SymbolView() 
 		{
 			addChild(symbolWrapper);
@@ -117,6 +119,7 @@ package lz.tools
 		
 		public function reset(symbol:SWFSymbol, swf:SWF, tagid2bitmap:Object):void {
 			symbolWrapper.x = symbolWrapper.y = 0;
+			dis2name = new Dictionary;
 			while (symbolWrapper.numChildren > 0) symbolWrapper.removeChildAt(0);
 			this.tagid2bitmap = tagid2bitmap;
 			this.swf = swf;
@@ -145,6 +148,7 @@ package lz.tools
 				var tagPlace:TagPlaceObject = tag as TagPlaceObject;
 				ctag = Utils.getTagById(swf, tagPlace.characterId);
 				var child:DisplayObject = getDisplay(ctag);
+				dis2name[child] = tagPlace.instanceName;
 				if (tagPlace.hasMatrix) {
 					child.transform.matrix =new Matrix(tagPlace.matrix.scaleX,tagPlace.matrix.rotateSkew0,tagPlace.matrix.rotateSkew1, tagPlace.matrix.scaleY,tagPlace.matrix.translateX/20,tagPlace.matrix.translateY/20);
 				}
