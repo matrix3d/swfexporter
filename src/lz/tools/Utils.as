@@ -10,6 +10,7 @@ package lz.tools
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.geom.Rectangle;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import nochump.util.zip.ZipEntry;
@@ -32,7 +33,7 @@ package lz.tools
 			return null;
 		}
 		
-		public static function export(disobj:DisplayObject,dis2name:Dictionary):Object {
+		public static function export(disobj:DisplayObject,dis2name:Dictionary,writeBounds:Boolean):Object {
 			if(disobj)
 			var m:Array = [disobj.transform.matrix.a, disobj.transform.matrix.b, disobj.transform.matrix.c, disobj.transform.matrix.d, disobj.transform.matrix.tx, disobj.transform.matrix.ty];
 			if (disobj is IDBitmap) {
@@ -41,7 +42,7 @@ package lz.tools
 				var timeline:TimelineSprite = disobj as TimelineSprite;
 				var obj:Object = { t:Type.TIMELINE, c:[], f:[],m:m };
 				for (var i:int = 0; i < timeline.tags.length;i++ ) {
-					obj.c[i] = export(timeline.tags[i],dis2name);
+					obj.c[i] = export(timeline.tags[i],dis2name,writeBounds);
 				}
 				for (i = 0; i < timeline.frames.length;i++ ) {
 					var frame:Frame = timeline.frames[i];
@@ -58,10 +59,15 @@ package lz.tools
 				retArr = obj;
 			}else if (disobj is Sprite) {
 				var wrapper:Sprite = disobj as Sprite;
-				obj = {t:Type.SPRITE,c:[],m:m};
+				obj = { t:Type.SPRITE, c:[], m:m };
+				if (wrapper is ShapeSprite) {
+					var ss:ShapeSprite = wrapper as ShapeSprite;
+					var bounds:Rectangle = ss.bounds;
+					obj.b = [bounds.x,bounds.y,bounds.width,bounds.height];
+				}
 				for (i = 0; i < wrapper.numChildren;i++ ) {
 					var child:DisplayObject = wrapper.getChildAt(i);
-					obj.c.push(export(child,dis2name));
+					obj.c.push(export(child,dis2name,writeBounds));
 				}
 				retArr = obj;
 			}

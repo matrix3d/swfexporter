@@ -83,7 +83,7 @@ package lz.tools
 			if(symbolTag)
 			for each(var symbol:SWFSymbol in symbolTag.symbols) {
 				symbolView.reset(symbol, swf, tagid2bitmap);
-				obj[symbol.name] = Utils.export(symbolView.symbolWrapper.getChildAt(0),symbolView.dis2name);
+				obj[symbol.name] = Utils.export(symbolView.symbolWrapper.getChildAt(0),symbolView.dis2name,symbol.name.indexOf("bounds")==0);
 			}
 			return Vector.<ExportData>([
 				new ExportData("sheet.png", pack.packbmd.encode(pack.packbmd.rect, new PNGEncoderOptions())),

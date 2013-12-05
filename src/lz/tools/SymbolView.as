@@ -22,6 +22,7 @@ package lz.tools
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.geom.Matrix;
+	import flash.geom.Rectangle;
 	import flash.ui.Keyboard;
 	import flash.ui.Mouse;
 	import flash.ui.MouseCursor;
@@ -37,7 +38,7 @@ package lz.tools
 		private var tagid2bitmap:Object;
 		private var deftag:IDefinitionTag;
 		public var symbolWrapper:Sprite = new Sprite;
-		private var currentShapeWrapper:Sprite;
+		private var currentShapeWrapper:ShapeSprite;
 		private var startMouseX:Number;
 		private var startMouseY:Number;
 		private var startSymbolWrapperX:Number;
@@ -159,8 +160,10 @@ package lz.tools
 				return child;
 			}else if (tag is TagDefineShape) {
 				var tagShape:TagDefineShape = tag as TagDefineShape;
-				currentShapeWrapper = new Sprite;
+				currentShapeWrapper = new ShapeSprite;
+				
 				tagShape.export(this);
+				currentShapeWrapper.bounds = tagShape.shapeBounds.rect;
 				return currentShapeWrapper;
 			}else {
 				//trace("error1",tag);
