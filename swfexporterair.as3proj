@@ -4,13 +4,13 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\swfexporter.swf" />
+    <movie path="bin\swfexporterair.swf" />
     <movie fps="30" />
     <movie width="800" />
     <movie height="600" />
-    <movie version="11" />
-    <movie minorVersion="3" />
-    <movie platform="Flash Player" />
+    <movie version="3" />
+    <movie minorVersion="9" />
+    <movie platform="AIR" />
     <movie background="#FFFFFF" />
   </output>
   <!-- Other classes to be compiled into your SWF -->
@@ -52,8 +52,8 @@
   </includeLibraries>
   <!-- SWC Libraries -->
   <libraryPaths>
-    <element path="lib\MinimalComps_0_9_10.swc" />
     <element path="lib\as3swf.swc" />
+    <element path="lib\MinimalComps_0_9_10.swc" />
     <element path="lib\RectanglePacker.swc" />
     <element path="lib\zip.swc" />
   </libraryPaths>
@@ -88,8 +88,8 @@
   <!-- Other project options -->
   <options>
     <option showHiddenPaths="True" />
-    <option testMovie="Unknown" />
-    <option testMovieCommand="" />
+    <option testMovie="Custom" />
+    <option testMovieCommand="Run.bat" />
   </options>
   <!-- Plugin storage -->
   <storage />

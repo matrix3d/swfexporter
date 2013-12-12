@@ -26,7 +26,7 @@ package lz.tools
 			for each(var obj:Object in tagid2bitmap) {
 				c++;
 			}
-			for (var w:int = 2;;w*=2 ) {
+			for (var w:int = 1;;w*=2 ) {
 				var rp:RectanglePacker=new RectanglePacker(w,w);
 				for(var id:String in tagid2bitmap){
 					var bmd:BitmapData = tagid2bitmap[id];
