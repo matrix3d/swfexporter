@@ -7,6 +7,7 @@ package lz.tools
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	}
+	import mx.utils.Base64Decoder;
 	import com.bit101.components.PushButton;
 	import com.codeazur.as3swf.SWF;
 	import flash.display.Sprite;
@@ -49,6 +50,7 @@ package lz.tools
 			}
 		}
 		
+		// air start
 		CONFIG::air{
 		private function addDragOpen():void 
 		{
@@ -94,6 +96,7 @@ package lz.tools
 			fs.close();
 		}
 		}
+		// air end
 		
 		private function export(e:Event):void 
 		{
@@ -117,6 +120,12 @@ package lz.tools
 		private function file_complete(e:Event):void 
 		{
 			swfTree.reset(new SWF(file.data));
+		}
+		
+		public function openSwfFromBase64(b64str:String):void {
+			var b64:Base64Decoder = new Base64Decoder();
+			b64.decode(b64str);
+			swfTree.reset(new SWF(b64.toByteArray()));
 		}
 		
 	}

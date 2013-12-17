@@ -56,6 +56,7 @@
     <element path="lib\as3swf.swc" />
     <element path="lib\RectanglePacker.swc" />
     <element path="lib\zip.swc" />
+    <element path="lib\framework.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

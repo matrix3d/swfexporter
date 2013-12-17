@@ -1,6 +1,7 @@
 package 
 {
 	import flash.display.Sprite;
+	import flash.external.ExternalInterface;
 	import lz.tools.App;
 	
 	/**
@@ -12,7 +13,11 @@ package
 		
 		public function Main():void 
 		{
-			addChild (new App);
+			var app:App = new App();
+			addChild (app);
+			if (ExternalInterface.available) {
+				ExternalInterface.addCallback("openSwfFromBase64", app.openSwfFromBase64);
+			}
 		}
 		
 	}
